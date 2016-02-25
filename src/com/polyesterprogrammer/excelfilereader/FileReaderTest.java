@@ -1,6 +1,6 @@
 package com.polyesterprogrammer.excelfilereader;
 
-import java.io.File;
+//import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,11 +13,12 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.apache.commons.*;
-import org.apache.commons.io.FileUtils;
+//import org.apache.commons.*;
+//import org.apache.commons.io.FileUtils;
 
-import static java.nio.file.StandardCopyOption.*;
+//import static java.nio.file.StandardCopyOption.*;
 
+// this class is used to rename the excel file to a what we want
 class NewName {
 	public Path newName(Path oldName, String newNameString){
 		try {
@@ -39,15 +40,19 @@ public class FileReaderTest {
 		String cellValue = null;
 		String removeXLSM;
 		String newFileName = null;
+		/*TODO: 1.ability to input the amount of excel files to do
+		 *      2. while loop to repeat steps for each excel file
+		*/
 		System.out.println("What is the name of the file?");
 		fileName = input.nextLine();
 		input.close();
 		 InputStream inp = new FileInputStream("C:\\Test\\" + fileName);
 		    XSSFWorkbook wb = new XSSFWorkbook(inp);
-		    XSSFSheet sheet = wb.getSheetAt(0);
-		    Row row = sheet.getRow(6);
-		    Cell cell = row.getCell(3);
+		    XSSFSheet sheet = wb.getSheetAt(0); // this chooses which workbook you start at
+		    Row row = sheet.getRow(6); // finds the specific row
+		    Cell cell = row.getCell(3);// finds the specific column
 		    
+		    // copies cell string value to string variable so that it can be appended
 		    if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
 		        System.out.println("string: " + cell.getStringCellValue());
 		        cellValue = cell.toString();
@@ -60,7 +65,7 @@ public class FileReaderTest {
 		    removeXLSM = fileName;
 		    if(removeXLSM!= null && removeXLSM.length() > 1){
 		    	newFileName = removeXLSM.substring(0, removeXLSM.length()-5);
-		    	newFileName = newFileName + " ISO Rev" + cellValue.charAt(13) + ".xlsm";
+		    	newFileName = newFileName + " ISO Rev" + cellValue.charAt(13) + ".xlsm"; // this creates the desired file name we want for the excel file
 		    }
 		    wb.close();
 		    inp.close();
