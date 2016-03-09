@@ -26,7 +26,7 @@ public class SplitFileName {
 	return newFileName;
 
 }
-	
+/*	
 	public String GetNewFileLooper(){
 		//starting: 101-008-005
 		nextFileParts = fileParts[0].split("-");
@@ -48,4 +48,5 @@ public class SplitFileName {
 		
 		return nextFileName;
 	}
+	*/
 }
