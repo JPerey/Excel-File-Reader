@@ -17,6 +17,7 @@ public class SplitFileName {
 	
 	public String SplitFiles(){
 		if (oldFileName != null && oldFileName.length() > 1) {
+			System.out.println("TESTING TESTING oldFileName is: " + oldFileName);
 			fileParts = oldFileName.split(" ");
 			cellValue = cellValue.substring(cellValue.length()-1);
 			newFileSegment = fileParts[0] + "-" + cellValue;
