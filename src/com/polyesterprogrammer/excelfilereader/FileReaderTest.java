@@ -8,7 +8,7 @@ package com.polyesterprogrammer.excelfilereader;
 		     3. while loop to repeat steps for each excel file. DONE 
 		     4. Allow program to switch form old and new file formats. done
 		     5. Replace all " .11 " thk with " .1 " thk for any " 1/2" " thicknesses
-		     6. if the files have already been edited, have a check to make sure it doesn't go through them again
+		     6. if the files have already been edited, have a check to make sure it doesn't go through them again. done
 */
 
 import java.io.FileInputStream;
@@ -61,7 +61,6 @@ public class FileReaderTest {
 		FileDirectoryReader fdr = new FileDirectoryReader(filePath);
 
 		fileNameList = fdr.FindFilePath();
-		
 
 		try {
 			do {
@@ -90,8 +89,9 @@ public class FileReaderTest {
 				// copies cell string value to string variable
 				if (excelCell.getCellType() == Cell.CELL_TYPE_STRING) {
 					cellValue = excelCell.toString();
-					//use this to check iff you need to see what is cell name
-					//System.out.println("TESTING CELL TYPE string: " + cellValue);
+					// use this to check iff you need to see what is cell name
+					// System.out.println("TESTING CELL TYPE string: " +
+					// cellValue);
 				} else if (excelCell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
 					System.out.println("Wrong cell");
 				}
@@ -106,9 +106,9 @@ public class FileReaderTest {
 
 				String oldFilePath = filePath + "\\" + fileNameList.get(i);
 				String newFilePath = filePath + "\\" + newFileName;
-			
-				//turns Strings into an actual file path that can be used
-				Path oldFileDir = Paths.get(oldFilePath); 
+
+				// turns Strings into an actual file path that can be used
+				Path oldFileDir = Paths.get(oldFilePath);
 
 				NewFilePath renamingMethod = new NewFilePath();
 
@@ -120,10 +120,10 @@ public class FileReaderTest {
 			System.out.println("File does not exist.");
 			fnfE.getStackTrace();
 		} catch (IOException ioE) {
-			System.out.println("File Path: " +filePath+ " cannot be found. Please check file path and try again. " );
+			System.out.println("File Path: " + filePath + " cannot be found. Please check file path and try again. ");
 			ioE.printStackTrace();
-		}catch(IndexOutOfBoundsException ioobE){
-			System.out.println(" Pleaserestart program with correct file path");
+		} catch (IndexOutOfBoundsException ioobE) {
+			System.out.println("All files in directory have already been edited.");
 		}
 		;
 		input.close();

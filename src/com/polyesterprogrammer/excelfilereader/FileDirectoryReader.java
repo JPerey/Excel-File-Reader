@@ -9,8 +9,9 @@ public class FileDirectoryReader {
 	// will hold the list of file names in this class to be passed on
 	private ArrayList<String> onlyFileNames = new ArrayList<String>();
 	int i;
+	Boolean repeatedFile;
 
-	//this method finds all files in a directory and adds them to the array
+	// this method finds all files in a directory and adds them to the array
 	public FileDirectoryReader(String filePath) {
 		this.filePath = filePath;
 	}
@@ -22,17 +23,24 @@ public class FileDirectoryReader {
 			File[] listOfFiles = folder.listFiles();
 
 			for (File file : listOfFiles) {
+				repeatedFile = erc.regexRepeater(file.getName());
 				if (file.isFile()) {
-					//add check for 3 dashes here
-					onlyFileNames.add(file.getName());
-					System.out.println("TESTING TESTING file names: " + onlyFileNames.get(i));
-					erc.regexRepeater(onlyFileNames, i);
-					i++;
+
+					if (repeatedFile) {
+						System.out.println("File: " + file.getName() + " has already been compiled. Skipping.");
+					} else {
+						onlyFileNames.add(file.getName());
+						i++;
+					}
+
 				}
 			}
+
 		} catch (NullPointerException npE) {
+			npE.getStackTrace();
 			System.out.println(
 					"File Path: " + filePath + "is incorrect. Please check that you correctly copied and try again.");
+
 		}
 
 		return onlyFileNames;

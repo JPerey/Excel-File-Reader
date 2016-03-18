@@ -1,6 +1,5 @@
 package com.polyesterprogrammer.excelfilereader;
 
-import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -8,6 +7,8 @@ public class ExcelRegexChecker {
 	String fileName;
 	String pulledRevisionNumber;
 	String newRevisionNumber;
+	Boolean repeatedFile;
+	int count = 0;
 
 	// this method finds the revision number in the old file name and ooutputs
 	// it
@@ -34,7 +35,7 @@ public class ExcelRegexChecker {
 	public String patternReplacer(String str2Replace) {
 		String newFileName;
 
-		Pattern replace = Pattern.compile("\\s[Ra-zA-Z\\:] ");
+		Pattern replace = Pattern.compile("[R]([a-zA-Z:\\s*]+)?");
 
 		Matcher regexMatcher = replace.matcher(str2Replace);
 		newFileName = regexMatcher.replaceAll("-");
@@ -42,18 +43,22 @@ public class ExcelRegexChecker {
 		return newFileName;
 	}
 
-	public Boolean regexRepeater(ArrayList<String> fileNames, int count) {
-		Pattern fileRepeatChecker = Pattern.compile("(\\d{1,}/-]{4,})");
-		Matcher regexRepeatFileMatcher = fileRepeatChecker.matcher(fileNames.get(count));
+	public Boolean regexRepeater(String fileName) {
+		Pattern fileRepeatChecker = Pattern.compile("[0-9\\-]{4}");
+		Matcher regexRepeatFileMatcher = fileRepeatChecker.matcher(fileName);
 
 		while (regexRepeatFileMatcher.find()) {
-				//System.out.println(regexRepeatFileMatcher.group());
-		//	System.out.println("Files have already been compiled. Shutting program down");
-			//System.exit(0);
-			
-		}
+			count++;
+			if (count > 2) {
+				repeatedFile = true;
+			} else {
+				repeatedFile = false;
+			}
 
-		return null;
+		}
+		count = 0;
+
+		return repeatedFile;
 
 	}
 }

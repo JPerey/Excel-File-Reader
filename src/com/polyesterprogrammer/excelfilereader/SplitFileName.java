@@ -19,10 +19,8 @@ public class SplitFileName {
 			fileParts = oldFileName.split(" ");
 			
 			ExcelRegexChecker erc = new ExcelRegexChecker();
-			System.out.println("The Excel sheet revision data is " + cellValue);
 			//R9,Rev9, Revision: 10
 			pulledRevisionNum = erc.patternFinder("[R]([a-zA-Z:\\s*]+)?[0-9]+", cellValue);
-			System.out.println("TESTING TESTING The pulled revision number is " + pulledRevisionNum);
 			dashedRevisionNum = erc.patternReplacer(pulledRevisionNum);
 
 
