@@ -4,8 +4,11 @@ package com.polyesterprogrammer.excelfilereader;
  * This program is to be used with Chevron Corp. and the T-min group in Richmond,CA to automate the File-Renaming Process
  *	
  *	TODO:    1.ability to input the amount of excel files to do. DONE
- *			 2. CHANGE FILENAME STORAGE TO A 2D ARRAY. WILL HOLD ALL VALUES FOR EACH FILENAME!
-		     3. while loop to repeat steps for each excel file. DONE
+ *			 2. CHANGE FILENAME STORAGE TO A 2D ARRAY. WILL HOLD ALL VALUES FOR EACH FILENAME! done
+		     3. while loop to repeat steps for each excel file. DONE 
+		     4. Allow program to switch form old and new file formats. done
+		     5. Replace all " .11 " thk with " .1 " thk for any " 1/2" " thicknesses
+		     6. if the files have already been edited, have a check to make sure it doesn't go through them again
 */
 
 import java.io.FileInputStream;
@@ -40,75 +43,91 @@ public class FileReaderTest {
 
 	public static void main(String[] args) {
 		Scanner input = new Scanner(System.in);
-		
-		int i =0;
+
+		// iterable digit that will go through collection of files
+		int i = 0;
+		// collection of all files found in given directory
 		ArrayList<String> fileNameList = new ArrayList<String>();
-		//int fileCount; // this will hold the amount of files in the set
-		//int firstLoop = 0; // this will loop input for last 3 digits of files until it reaches fileCount #
-		//int secondLoop = 0; // this will loop and edit all files in the array until it reaches fileCount #
-		String filePath; // this will take in the file path for the set of files to be worked on
-		//String moreSheets; // this will determine whether or not the ISO has a second sheet
-		//String[][] fileNameArray; // First part of file name. 2d array that will hold the last 3 digits, as well as whether or not that particular ISO has a second sheet
-		//String fileName = null; // the name of the file to be edited
-		String cellValue = null; // data pulled from excel sheet to be added to file name
-		String newFileName = null; // next file name to be edited. will replace file name value at end of loop
+		// folder directory given by user
+		String filePath;
+		// data pulled from excel cell
+		String cellValue = null;
+		// the new file name that will replace the existing file name
+		String newFileName = null;
 
 		System.out.println("Where is the folder located (ex: O:\\Technical\\DED\\11-Misc\\DED Tmins for Meridium)?");
+		// this should be the only input needed from the user
 		filePath = input.nextLine();
 		FileDirectoryReader fdr = new FileDirectoryReader(filePath);
-		
+
 		fileNameList = fdr.FindFilePath();
-		System.out.println("TESTING TESTING Whats in fileNameList: " + fileNameList);
 		
-		//while(iterator.hasNext()){
-		//	System.out.println(filePath +"\\" +iterator.next());
-		//}
 
+		try {
+			do {
+				InputStream inp = new FileInputStream(filePath + "\\" + fileNameList.get(i));
+				XSSFWorkbook wb = new XSSFWorkbook(inp);
+				// this chooses which workbook you start at
+				XSSFSheet sheet = wb.getSheetAt(0);
+				// section will check for new or old sheet
+				Row excelRow = sheet.getRow(18); // specific row
+				Cell excelCell = excelRow.getCell(1);// specific column
 
-		try{
-		do{
-     	InputStream inp = new FileInputStream(filePath +"\\" + fileNameList.get(i));
-		XSSFWorkbook wb = new XSSFWorkbook(inp);
-		// this chooses which workbook you start at
-		XSSFSheet sheet = wb.getSheetAt(0);
-		Row excelRow = sheet.getRow(6); // finds the specific row
-		Cell excelCell = excelRow.getCell(3);// finds the specific column
+				if (excelCell.getCellType() == Cell.CELL_TYPE_STRING) {
+					// this is for old sheets
+					if (excelCell.toString().equals("OD nom")) {
+						excelRow = sheet.getRow(5);
+						excelCell = excelRow.getCell(2);
 
-		// copies cell string value to string variable so that it can be
-		// appended
-		if (excelCell.getCellType() == Cell.CELL_TYPE_STRING) {
-			System.out.println("TESTING CELL TYPE string: " + excelCell.getStringCellValue()); //USE this if you need to check current value of file name
-			cellValue = excelCell.toString();
-		} else if (excelCell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
-			System.out.println("Wrong cell");
-		}
-		//creates the object that will do the renaming process
-		System.out.println("TESTING TESTING What is going to be the old file name: " + fileNameList.get(i));
-		SplitFileName fileSplitter = new SplitFileName(fileNameList.get(i), cellValue);
-		newFileName = fileSplitter.SplitFiles();
+						// this is for new sheets
+					} else if (excelCell.toString().equals("Design Press' (P) ")) {
+						excelRow = sheet.getRow(6);
+						excelCell = excelRow.getCell(3);
 
-		wb.close();
-		inp.close();
+					}
+				}
 
-		String oldFilePath = filePath +"\\" + fileNameList.get(i);
-		String newFilePath = filePath +"\\" + newFileName;
-		System.out.println("TESTING TESTING oldfilepath is: " + oldFilePath);
-		System.out.println("TESTING TESTING newfilepath is: " + newFilePath);
-		
-		Path oldFileDir = Paths.get(oldFilePath); // turns the String oldFilePath into an actual Path that the computer can use
+				// copies cell string value to string variable
+				if (excelCell.getCellType() == Cell.CELL_TYPE_STRING) {
+					cellValue = excelCell.toString();
+					//use this to check iff you need to see what is cell name
+					//System.out.println("TESTING CELL TYPE string: " + cellValue);
+				} else if (excelCell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+					System.out.println("Wrong cell");
+				}
+				// creates the object that will do the renaming process
+				// System.out.println("TESTING TESTING What is going to be the
+				// old file name: " + fileNameList.get(i));
+				SplitFileName fileSplitter = new SplitFileName(fileNameList.get(i), cellValue);
+				newFileName = fileSplitter.SplitFiles();
 
-		NewFilePath renamingMethod = new NewFilePath();
+				wb.close();
+				inp.close();
 
-		renamingMethod.excelNewName(oldFileDir, newFilePath);
-		i++;
-		}while(i< fileNameList.size());
-		}catch(FileNotFoundException fnfE){
-			System.out.println("file:"  +"Does not exist. Please re-enter values for the name");
+				String oldFilePath = filePath + "\\" + fileNameList.get(i);
+				String newFilePath = filePath + "\\" + newFileName;
+			
+				//turns Strings into an actual file path that can be used
+				Path oldFileDir = Paths.get(oldFilePath); 
+
+				NewFilePath renamingMethod = new NewFilePath();
+
+				renamingMethod.excelNewName(oldFileDir, newFilePath);
+				System.out.println("old file name: " + fileNameList.get(i) + " || new file name: " + newFileName);
+				i++;
+			} while (i < fileNameList.size());
+		} catch (FileNotFoundException fnfE) {
+			System.out.println("File does not exist.");
 			fnfE.getStackTrace();
 		} catch (IOException ioE) {
-			
+			System.out.println("File Path: " +filePath+ " cannot be found. Please check file path and try again. " );
 			ioE.printStackTrace();
-		};
+		}catch(IndexOutOfBoundsException ioobE){
+			System.out.println(" Pleaserestart program with correct file path");
+		}
+		;
+		input.close();
+		System.out.println("Program finished.");
 
 	}
 

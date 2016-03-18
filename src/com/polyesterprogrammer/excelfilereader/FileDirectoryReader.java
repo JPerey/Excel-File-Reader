@@ -4,36 +4,39 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class FileDirectoryReader {
+	// file path from user input
 	private String filePath = null;
+	// will hold the list of file names in this class to be passed on
 	private ArrayList<String> onlyFileNames = new ArrayList<String>();
-	
-	public FileDirectoryReader(String filePath){
+	int i;
+
+	//this method finds all files in a directory and adds them to the array
+	public FileDirectoryReader(String filePath) {
 		this.filePath = filePath;
 	}
 
-	 public ArrayList<String> FindFilePath(){
-	//public static void main(String[] args){
-		File folder = new File(filePath);
-		File[] listOfFiles = folder.listFiles();
+	public ArrayList<String> FindFilePath() {
+		try {
+			ExcelRegexChecker erc = new ExcelRegexChecker();
+			File folder = new File(filePath);
+			File[] listOfFiles = folder.listFiles();
 
-		for (File file : listOfFiles) {
-		    if (file.isFile()) {
-		        //System.out.println(onlyFileNames.add(file.getName()));
-		    	onlyFileNames.add(file.getName());
-		    	System.out.println(onlyFileNames.size());
-		    }
+			for (File file : listOfFiles) {
+				if (file.isFile()) {
+					//add check for 3 dashes here
+					onlyFileNames.add(file.getName());
+					System.out.println("TESTING TESTING file names: " + onlyFileNames.get(i));
+					erc.regexRepeater(onlyFileNames, i);
+					i++;
+				}
+			}
+		} catch (NullPointerException npE) {
+			System.out.println(
+					"File Path: " + filePath + "is incorrect. Please check that you correctly copied and try again.");
 		}
-		System.out.println(listOfFiles[0]);
-		System.out.println(listOfFiles[1]);
-		
-		System.out.println(onlyFileNames.get(0));
-		System.out.println(onlyFileNames.get(1));
-		System.out.println(onlyFileNames.get(2));
+
 		return onlyFileNames;
-		
 
-
-	
 	}
-	
+
 }
