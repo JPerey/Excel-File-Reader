@@ -1,6 +1,5 @@
 package com.polyesterprogrammer.excelfilereader;
 /*
- * Written by: Jam Jam James Perey
  * This program is to be used with Chevron Corp. and the T-min group in Richmond,CA to automate the File-Renaming Process
  *	
  *	TODO:    1.ability to input the amount of excel files to do. DONE
