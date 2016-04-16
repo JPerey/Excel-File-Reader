@@ -10,10 +10,11 @@ package com.polyesterprogrammer.excelfilereader;
 		     6. if the files have already been edited, have a check to make sure it doesn't go through them again. done
 */
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -53,6 +54,11 @@ public class FileReaderTest {
 		String cellValue = null;
 		// the new file name that will replace the existing file name
 		String newFileName = null;
+		double thicknessValue = 0;
+		Row excelRow;
+		Row thicknessRow;
+		Cell excelCell;
+		Cell thicknessCell = null;
 
 		System.out.println("Where is the folder located (ex: O:\\Technical\\DED\\11-Misc\\DED Tmins for Meridium)?");
 		// this should be the only input needed from the user
@@ -63,22 +69,52 @@ public class FileReaderTest {
 
 		try {
 			do {
-				InputStream inp = new FileInputStream(filePath + "\\" + fileNameList.get(i));
+				FileInputStream inp = new FileInputStream(filePath + "\\" + fileNameList.get(i));
 				XSSFWorkbook wb = new XSSFWorkbook(inp);
 				// this chooses which workbook you start at
 				XSSFSheet sheet = wb.getSheetAt(0);
 				// section will check for new or old sheet
-				Row excelRow = sheet.getRow(18); // specific row
-				Cell excelCell = excelRow.getCell(1);// specific column
+				excelRow = sheet.getRow(18); // specific row
+				excelCell = excelRow.getCell(1);// specific column
 
 				if (excelCell.getCellType() == Cell.CELL_TYPE_STRING) {
 					// this is for old sheets
 					if (excelCell.toString().equals("OD nom")) {
+
+						// checking for numeric value .11 in designated cell
+						thicknessRow = sheet.getRow(25);
+						thicknessCell = thicknessRow.getCell(5);
+						excelCell.setCellType(Cell.CELL_TYPE_NUMERIC);
+						thicknessValue = thicknessCell.getNumericCellValue();
+						if (thicknessValue == .11) {
+
+							// ---------Pipe Thickness checker
+							thicknessCell = thicknessRow.getCell(5);
+							// deleting value inside cell, and replacing with .1
+							thicknessCell.setCellType(Cell.CELL_TYPE_BLANK);
+							thicknessCell.setCellValue("0.100");
+						}
+						// ---------Pipe Thickness checker
 						excelRow = sheet.getRow(5);
 						excelCell = excelRow.getCell(2);
 
 						// this is for new sheets
 					} else if (excelCell.toString().equals("Design Press' (P) ")) {
+
+						// checking for numeric value .11 in designated cell
+						thicknessRow = sheet.getRow(16);
+						thicknessCell = thicknessRow.getCell(18);
+						thicknessCell.setCellType(Cell.CELL_TYPE_NUMERIC);
+						thicknessValue = thicknessCell.getNumericCellValue();
+						if (thicknessValue == .11) {
+
+							// ---------Pipe Thickness checker
+							thicknessCell = thicknessRow.getCell(18);
+							// deleting value inside cell, and replacing with .1
+							thicknessCell.setCellType(Cell.CELL_TYPE_BLANK);
+							thicknessCell.setCellValue("0.100");
+						}
+						// ---------Pipe Thickness checker
 						excelRow = sheet.getRow(6);
 						excelCell = excelRow.getCell(3);
 
@@ -97,11 +133,14 @@ public class FileReaderTest {
 				// creates the object that will do the renaming process
 				// System.out.println("TESTING TESTING What is going to be the
 				// old file name: " + fileNameList.get(i));
+				inp.close();
+				FileOutputStream outputFile = new FileOutputStream(new File(filePath + "\\" + fileNameList.get(i)));
+				wb.write(outputFile); // write changes
+				outputFile.close(); // close the stream
+				wb.close();
+
 				SplitFileName fileSplitter = new SplitFileName(fileNameList.get(i), cellValue);
 				newFileName = fileSplitter.SplitFiles();
-
-				wb.close();
-				inp.close();
 
 				String oldFilePath = filePath + "\\" + fileNameList.get(i);
 				String newFilePath = filePath + "\\" + newFileName;
@@ -113,6 +152,8 @@ public class FileReaderTest {
 
 				renamingMethod.excelNewName(oldFileDir, newFilePath);
 				System.out.println("old file name: " + fileNameList.get(i) + " || new file name: " + newFileName);
+				System.out.println("1-1/2\" piping THK: " + thicknessCell);
+				System.out.println("---------------------------------");
 				i++;
 			} while (i < fileNameList.size());
 		} catch (FileNotFoundException fnfE) {
