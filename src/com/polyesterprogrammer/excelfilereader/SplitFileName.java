@@ -7,6 +7,7 @@ public class SplitFileName {
 	String newFileName;
 	String pulledRevisionNum;
 	String dashedRevisionNum;
+	int count = 0;
 
 	public SplitFileName(String fileName, String cellValue) {
 		this.oldFileName = fileName;
@@ -25,7 +26,20 @@ public class SplitFileName {
 
 
 		}
-		newFileName = fileParts[0]+ dashedRevisionNum + " " +fileParts[1] + " " +fileParts[2];
+		for(String filePart : fileParts){
+			
+			if (count < 1){
+				newFileName = filePart + dashedRevisionNum;
+			} else {
+				newFileName = newFileName + " " + filePart;
+			}
+			count++;
+		}
+		//newFileName = fileParts[0]+ dashedRevisionNum + " " +fileParts[1] + " " +fileParts[2];
+		/*if(!(fileParts[3].isEmpty())){
+			newFileName = newFileName + fileParts[3];
+		}*/
+		count = 0;
 		return newFileName;
 	}
 
