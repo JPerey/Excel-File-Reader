@@ -1,5 +1,6 @@
 package com.polyesterprogrammer.excelfilereader;
 
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -9,7 +10,7 @@ public class ExcelRegexChecker {
 	String newRevisionNumber;
 	Boolean repeatedFile;
 	int count = 0;
-
+	Scanner input = new Scanner(System.in);
 	// this method finds the rev number in the old file name and outputs it
 	public String patternFinder(String str2Find, String isoNum) {
 		String pulledRevisionNum = null;
@@ -25,6 +26,13 @@ public class ExcelRegexChecker {
 		} else {
 			
 			System.out.println("Sheet does not have a Revision number indicated in cell. Please locate ISO Rev and enter in ISO");
+			System.out.println("What is this ISO's revision number(ex: R1,r2,R3,r4,R11, etc.)?");
+			pulledRevisionNum = input.nextLine();
+			
+			if(!(pulledRevisionNum.startsWith("R") || pulledRevisionNum.startsWith("r"))){
+				pulledRevisionNum = "R" + pulledRevisionNum;
+			}
+			
 		}}catch(NullPointerException npE){
 			System.out.println("Program closing until ISO revision is entered");
 			System.exit(0);
@@ -39,7 +47,7 @@ public class ExcelRegexChecker {
 	public String patternReplacer(String str2Replace) {
 		String newFileName;
 
-		Pattern replace = Pattern.compile("[R]([a-zA-Z:\\s*]+)?");
+		Pattern replace = Pattern.compile("[Rr]([a-zA-Z:\\s*]+)?");
 
 		Matcher regexMatcher = replace.matcher(str2Replace);
 		newFileName = regexMatcher.replaceAll("-");

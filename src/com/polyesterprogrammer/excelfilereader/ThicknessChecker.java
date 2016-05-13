@@ -63,7 +63,8 @@ public class ThicknessChecker {
 				sheetCheckerCell = sheetCheckerRow.getCell(0);
 				// Old 5D Bend Sheet
 				if (sheetCheckerCell.toString()
-						.equals("Tmin-Req for Intrados of 5D Bends in Piping Circuits (Yr 2000 & later)")) {
+						.equals("Tmin-Req for Intrados of 5D Bends in Piping Circuits (Yr 2000 & later)") || sheetCheckerCell.toString()
+						.equals("\"B31.3\" Tmin-Req for Intrados of 5D Bends in Piping Circuits (Yr 2000 & later)")) {
 					System.out.println("!5D Bend ISO!");
 					// setting excel revision cells
 					excelRow = sheetRevision.getRow(5);
@@ -121,13 +122,13 @@ public class ThicknessChecker {
 			// closes excel reader stream
 			wb.close();
 		} catch (FileNotFoundException fnfE) {
-			System.out.println("File does not exist.");
+			System.out.println("File does not exist. thicknesschecker class");
 			fnfE.getStackTrace();
 		} catch (IOException ioE) {
-			System.out.println("File Path: " + filePath + " cannot be found. Please check file path and try again. ");
+			System.out.println("File Path: " + filePath + "\\" + fileName +" cannot be found. Please check file path and try again. thicknesschecker class");
 			ioE.printStackTrace();
 		} catch (IndexOutOfBoundsException ioobE) {
-			System.out.println("All files in directory have already been edited.");
+			System.out.println("All files in directory have already been edited. thicknesschecker class");
 			// ioobE.printStackTrace();
 		}
 		return cellValue;

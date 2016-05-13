@@ -18,7 +18,7 @@ public class FileDirectoryReader {
 		this.filePath = filePath;
 	}
 
-	public ArrayList<String> parentDirectoryFindFilePath(String parentFilePath) {
+	public ArrayList<String> parentDirectoryFileNameArrayMethod(String parentFilePath) {
 		try {
 			ExcelRegexChecker erc = new ExcelRegexChecker();
 			File folder = new File(parentFilePath);
@@ -33,6 +33,9 @@ public class FileDirectoryReader {
 					} else {
 						onlySubFileNames1.add(file.getName());
 						if (!(file.getName().endsWith("xlsm"))) {
+							onlySubFileNames1.remove(i);
+						}
+						if(file.getName().startsWith("$") || file.getName().startsWith("~") || file.getName().startsWith("~$")){
 							onlySubFileNames1.remove(i);
 						}
 						i++;
@@ -53,7 +56,7 @@ public class FileDirectoryReader {
 
 	}
 	
-	public ArrayList<String> SubFolder1FindFilePath(String subFilePath1){
+	public ArrayList<String> SubFolder1FileNameArrayMethod(String subFilePath1){
 		try {
 			ExcelRegexChecker erc = new ExcelRegexChecker();
 			File folder = new File(subFilePath1);
@@ -68,6 +71,9 @@ public class FileDirectoryReader {
 					} else {
 						onlySubFileNames2.add(file.getName());
 						if (!(file.getName().endsWith("xlsm"))) {
+							onlySubFileNames2.remove(i);
+						}
+						if(file.getName().startsWith("$") || file.getName().startsWith("~") || file.getName().startsWith("~$")){
 							onlySubFileNames2.remove(i);
 						}
 						i++;
@@ -88,7 +94,7 @@ public class FileDirectoryReader {
 		
 	}
 
-	public ArrayList<String> subFolder2FindFilePath(String subFilePath2){
+	public ArrayList<String> subFolder2FileNameArrayMethod(String subFilePath2){
 		try {
 			ExcelRegexChecker erc = new ExcelRegexChecker();
 			File folder = new File(subFilePath2);
@@ -103,6 +109,9 @@ public class FileDirectoryReader {
 					} else {
 						onlySubFileNames3.add(file.getName());
 						if (!(file.getName().endsWith("xlsm"))) {
+							onlySubFileNames3.remove(i);
+						}
+						if(file.getName().startsWith("$") || file.getName().startsWith("~") || file.getName().startsWith("~$")){
 							onlySubFileNames3.remove(i);
 						}
 						i++;
