@@ -10,6 +10,9 @@ public class FileDirectoryReader {
 	private ArrayList<String> onlySubFileNames1 = new ArrayList<String>();
 	private ArrayList<String> onlySubFileNames2 = new ArrayList<String>();
 	private ArrayList<String> onlySubFileNames3 = new ArrayList<String>();
+	private ArrayList<String> thicknessOnlyFileNames1 = new ArrayList<String>();
+	private ArrayList<String> thicknessOnlyFileNames2 = new ArrayList<String>();
+	private ArrayList<String> thicknessOnlyFileNames3 = new ArrayList<String>();
 	int i;
 	Boolean repeatedFile;
 
@@ -29,7 +32,14 @@ public class FileDirectoryReader {
 				if (file.isFile()) {
 
 					if (repeatedFile) {
-						System.out.println("File: " + file.getName() + " has already been compiled. Skipping.");
+						System.out.println("File: " + file.getName() + " has already been compiled. Moving to Thickness Checking only.");
+						thicknessOnlyFileNames1.add(file.getName());
+						if (!(file.getName().endsWith("xlsm"))) {
+							thicknessOnlyFileNames1.remove(i);
+						}
+						if(file.getName().startsWith("$") || file.getName().startsWith("~") || file.getName().startsWith("~$")){
+							thicknessOnlyFileNames1.remove(i);
+						}
 					} else {
 						onlySubFileNames1.add(file.getName());
 						if (!(file.getName().endsWith("xlsm"))) {
@@ -67,7 +77,14 @@ public class FileDirectoryReader {
 				if (file.isFile()) {
 
 					if (repeatedFile) {
-						System.out.println("File: " + file.getName() + " has already been compiled. Skipping.");
+						System.out.println("File: " + file.getName() + " has already been compiled. Moving to Thickness Checking only.");
+						thicknessOnlyFileNames2.add(file.getName());
+						if (!(file.getName().endsWith("xlsm"))) {
+							thicknessOnlyFileNames2.remove(i);
+						}
+						if(file.getName().startsWith("$") || file.getName().startsWith("~") || file.getName().startsWith("~$")){
+							thicknessOnlyFileNames2.remove(i);
+						}
 					} else {
 						onlySubFileNames2.add(file.getName());
 						if (!(file.getName().endsWith("xlsm"))) {
@@ -105,7 +122,14 @@ public class FileDirectoryReader {
 				if (file.isFile()) {
 
 					if (repeatedFile) {
-						System.out.println("File: " + file.getName() + " has already been compiled. Skipping.");
+						System.out.println("File: " + file.getName() + " has already been compiled. Moving to Thickness Checking only.");
+						thicknessOnlyFileNames3.add(file.getName());
+						if (!(file.getName().endsWith("xlsm"))) {
+							thicknessOnlyFileNames3.remove(i);
+						}
+						if(file.getName().startsWith("$") || file.getName().startsWith("~") || file.getName().startsWith("~$")){
+							thicknessOnlyFileNames3.remove(i);
+						}
 					} else {
 						onlySubFileNames3.add(file.getName());
 						if (!(file.getName().endsWith("xlsm"))) {
@@ -129,6 +153,18 @@ public class FileDirectoryReader {
 		}
 		
 		return onlySubFileNames3;
+	}
+	
+	public ArrayList<String> returnThicknessOnlySubFile1(){
+		return thicknessOnlyFileNames1;
+	}
+	
+	public ArrayList<String> returnThicknessOnlySubFile2(){
+		return thicknessOnlyFileNames2;
+	}
+	
+	public ArrayList<String> returnThicknessOnlySubFile3(){
+		return thicknessOnlyFileNames3;
 	}
 	
 }

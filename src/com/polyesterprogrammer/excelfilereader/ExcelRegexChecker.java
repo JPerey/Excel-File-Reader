@@ -6,34 +6,48 @@ import java.util.regex.Pattern;
 
 public class ExcelRegexChecker {
 	String fileName;
-	String pulledRevisionNumber;
-	String newRevisionNumber;
+	String pulledRevisionNum = null;
+	int pulledRevisionNumInt = 0;
+	// checks if a file has already been edited
 	Boolean repeatedFile;
 	int count = 0;
+	// checks if the inputed revision number from user is actually a number
+	boolean incorrect = true;
 	Scanner input = new Scanner(System.in);
-	// this method finds the rev number in the old file name and outputs it
+
+	// this method finds the revision number(ex:R2) in the old file name and
+	// outputs it
 	public String patternFinder(String str2Find, String isoNum) {
-		String pulledRevisionNum = null;
 
 		Pattern rFinder = Pattern.compile(str2Find);
 		Matcher patternFind = rFinder.matcher(isoNum);
-		
-		try{
-		if (patternFind.find()) {
 
-			pulledRevisionNum = patternFind.group();
+		try {
+			if (patternFind.find()) {
 
-		} else {
-			
-			System.out.println("Sheet does not have a Revision number indicated in cell. Please locate ISO Rev and enter in ISO");
-			System.out.println("What is this ISO's revision number(ex: R1,r2,R3,r4,R11, etc.)?");
-			pulledRevisionNum = input.nextLine();
-			
-			if(!(pulledRevisionNum.startsWith("R") || pulledRevisionNum.startsWith("r"))){
-				pulledRevisionNum = "R" + pulledRevisionNum;
+				pulledRevisionNum = patternFind.group();
+
+			} else {
+				// user can input revision number manually if it cannot be found
+				do {
+					try {
+						System.out.println(
+								"Sheet does not have a Revision number indicated in cell. Please locate ISO Rev and enter in ISO");
+						System.out.println("What is ISO: " + isoNum + "'s revision number(ex: 1,2,3,4,11, etc.)?");
+						pulledRevisionNumInt = Integer.parseInt(input.nextLine());
+
+						if (pulledRevisionNumInt >= 1) {
+							incorrect = false;
+						}
+
+					} catch (Exception e) {
+						System.out.println("Incorrect value entered. Please enter a number");
+					}
+				} while (incorrect);
 			}
-			
-		}}catch(NullPointerException npE){
+			incorrect = true;
+			pulledRevisionNum = "R" + pulledRevisionNumInt;
+		} catch (NullPointerException npE) {
 			System.out.println("Program closing until ISO revision is entered");
 			System.exit(0);
 		}
@@ -57,7 +71,7 @@ public class ExcelRegexChecker {
 
 	public Boolean regexRepeater(String fileName) {
 		// Pattern used to find repeated files
-		Pattern fileRepeatChecker = Pattern.compile("[(0-9)]{0,}[(A-Z)]?[(0-9)]{0,}[\\-]"); 
+		Pattern fileRepeatChecker = Pattern.compile("[(0-9)]{0,}[(A-Z)]?[(0-9)]{0,}[\\-]");
 		Matcher regexRepeatFileMatcher = fileRepeatChecker.matcher(fileName);
 
 		while (regexRepeatFileMatcher.find()) {

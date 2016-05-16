@@ -10,23 +10,23 @@ public class CallandPrint {
 	String newFileName = null;
 	String currentFilePath;
 	ArrayList<String> fileNameList = new ArrayList<String>();
-	int i=0;
+	int iterator = 0;
 
 	public void callAndPrintMethod(ArrayList<String> fileNameList, String currentFilePath) {
+		System.out.println("--------------");
 		for (String fileNameListing : fileNameList) {
 			System.out.println("ISO to be revised: " + fileNameListing);
 		}
+		System.out.println("--------------");
 		try{
 		do{
 		ThicknessChecker tC = new ThicknessChecker();
-		cellValue = tC.thicknessCheckerMethod(currentFilePath, fileNameList.get(i));
+		cellValue = tC.thicknessCheckerMethod(currentFilePath, fileNameList.get(iterator));
 
-		System.out.println("the cell value is " + cellValue);
-		System.out.println(fileNameList.get(i));
-		SplitFileName fileSplitter = new SplitFileName(fileNameList.get(i), cellValue);
+		SplitFileName fileSplitter = new SplitFileName(fileNameList.get(iterator), cellValue);
 		newFileName = fileSplitter.SplitFiles();
 
-		String oldFilePath = currentFilePath + "\\" + fileNameList.get(i);
+		String oldFilePath = currentFilePath + "\\" + fileNameList.get(iterator);
 		String newFilePath = currentFilePath + "\\" + newFileName;
 
 		// turns Strings into an actual file path that
@@ -36,14 +36,14 @@ public class CallandPrint {
 		NewFilePath renamingMethod = new NewFilePath();
 
 		renamingMethod.excelNewName(oldFileDir, newFilePath);
-		System.out.println("old file name: " + fileNameList.get(i) + " || new file name: " + newFileName);
+		System.out.println("old file name: " + fileNameList.get(iterator) + " || new file name: " + newFileName);
 
-		System.out.println("---------------------------------");
-		i++;
-		}while (i < fileNameList.size());
+		System.out.println("-------------------------------------------------------");
+		iterator++;
+		}while (iterator < fileNameList.size());
 		}catch(IndexOutOfBoundsException ioobE){
 			System.out.println("no files to revise.");
 		}
-		i=0;
+		iterator = 0;
 	}
 }

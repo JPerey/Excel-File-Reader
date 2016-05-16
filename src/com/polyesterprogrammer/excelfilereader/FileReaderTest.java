@@ -9,13 +9,12 @@ package com.polyesterprogrammer.excelfilereader;
 		     5. Replace all " .11 " thk with " .1 " thk for any " 1/2" " thicknesses. DONE
 		     6. if the files have already been edited, have a check to make sure it doesn't go through them again. DONE
 		     7. exclude .jpg's, .pdf's. DONE
-		     8. if a folder is located inside the directory, program will look into that folder for more excel files to revise. 
+		     8. if a folder is located inside the directory, program will look into that folder for more excel files to revise.  DONE
 */
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -37,12 +36,13 @@ public class FileReaderTest {
 	public static void main(String[] args) {
 		// input for folder path
 		Scanner input = new Scanner(System.in);
-		// iterable digit that will go through collection of files
-		int i = 0;
-		// dictates if program is done
-		//int subDirectoryIterator1 = 0;
-		int subDirectoryIterator2 = 0;
+		// iterator for SUB sub-folder to move with sub-folder
 		int subDirectoryIterator3 = 0;
+		/*
+		 * resetIterator moves the parent directory folder index up by one each
+		 * // time the program is done with all the files inside that particular
+		 * parent directory folder
+		 */
 		int resetIterator = 1;
 		// collection of all files found in given directory
 		ArrayList<String> fileNameList = new ArrayList<String>();
@@ -52,10 +52,6 @@ public class FileReaderTest {
 		// folder directory given by user
 		String parentFilePath;
 		String currentFilePath;
-		// data pulled from excel cell
-		String cellValue = null;
-		// the new file name that will replace the existing file name
-		String newFileName = null;
 
 		System.out.println(
 				"Please input Parent Folder Directory (ex: O:\\Technical\\DED\\11-Misc\\DED Tmins for Meridium)");
@@ -65,89 +61,75 @@ public class FileReaderTest {
 
 		FileDirectoryReader fdr = new FileDirectoryReader(parentFilePath);
 
-		// initial creation of all arrays
-		subDirectory1 = fL.subFolder1ArrayCreator();
-		subDirectory2 = fL.subFolder2ArrayCreator(subDirectory1.get(i));
-		// initial filenames will come from deepest sub-folder first
-		subDirectory3 = fL.subFolder3ArrayCreator(subDirectory2.get(0));
-		// this for loop outputs the filename's that will be worked on
-		CallandPrint callPrint = new CallandPrint();
-		// fileNameList = fdr.subFolder2FindFilePath(subDirectory3.get(0));
-		System.out.println("the size of the filenamelist: " + fileNameList.size());
-		currentFilePath = subDirectory3.get(0);
+		try {
+			// initial creation of all arrays
+			subDirectory1 = fL.subFolder1ArrayCreator();
+			subDirectory2 = fL.subFolder2ArrayCreator(subDirectory1.get(0));
+			// initial filenames will come from deepest sub-folder first
+			subDirectory3 = fL.subFolder3ArrayCreator(subDirectory2.get(0));
+			// this for loop outputs the filename's that will be worked on
 
-		// Loops that will create new filename arrays for folders, and calls
-		// CallPrint Method
-		// System.out.println(" Iterating through: " + currentFilePath);
+		} catch (NullPointerException npE) {
+			System.out
+					.println("File Directory: \"" + parentFilePath + "\" incorrect. Please check and re-run program.");
+			System.exit(0);
+		}
+
+		CallandPrint callPrint = new CallandPrint();
+		// sets which current file array to look at first
+		if (!(subDirectory3.size() == 0)) {
+			currentFilePath = subDirectory3.get(0);
+		} else {
+			currentFilePath = subDirectory2.get(0);
+		}
+
+		// Loops that will cycle through each folder and edit files
 		// 1st sub folder section
 		for (String subDirectory1Index : subDirectory1) {
-			System.out.println("checking: 1st sub");
+			System.out.println("Currently in Parent Folder: " + subDirectory1Index);
 
 			// 2nd sub folder section
 			for (String subDirectory2Index : subDirectory2) {
-				System.out.println("checking: 2nd sub: " + subDirectory2Index);
+				System.out.println("Currently in sub-folder: " + subDirectory2Index);
+
 				if (subDirectoryIterator3 > 0) {
-					System.out.println("toot toot");
-					//System.out.println("the subDirectoryIterator2 is NOW: " + subDirectoryIterator2);
-					System.out.println("the directory is: " + subDirectory2Index);
 					subDirectory3 = fL.subFolder3ArrayCreator(subDirectory2Index);
-					System.out.println("list of subdirectory3 folders");
-					for( String sub3 : subDirectory3){
-						System.out.println("sub3 directory:" + sub3);
-					}
 				}
 				if (!(subDirectory3.size() == 0)) {
 					// 3rd sub folder section
-					System.out.println("Size of the ");
 					for (String subDirectory3Index : subDirectory3) {
-
+						System.out.println("Currently in SUB sub-folder:" + subDirectory3Index);
 						fileNameList.clear();
 						fileNameList = fdr.subFolder2FileNameArrayMethod(subDirectory3Index);
-						System.out
-								.println("size of the filename list in the 3rd sub folder is: " + fileNameList.size());
-						 System.out.println(" Iterating through BELLY: " +
-						 subDirectory3Index);
 						callPrint.callAndPrintMethod(fileNameList, subDirectory3Index);
-						System.out.println("Finished iterating through: " + subDirectory3Index);
+						System.out.println("Finished iterating through SUB sub-folder: " + subDirectory3Index);
 
 					}
 				}
 				// end of 3rd sub folder section
-				
+
 				currentFilePath = subDirectory2Index;
-				System.out.println(subDirectory2Index);
 				fileNameList.clear();
 				fileNameList = fdr.SubFolder1FileNameArrayMethod(subDirectory2Index);
-				// system.out.println(" Iterating throughPOW : " +
-				// currentFilePath);
 				callPrint.callAndPrintMethod(fileNameList, currentFilePath);
-				System.out.println("Finished iterating through: " + subDirectory2Index);
+				System.out.println("Finished iterating through sub-folder: " + subDirectory2Index);
 				subDirectoryIterator3++;
-				subDirectoryIterator2++;
 			}
 			// end of 2nd sub folder section
-			
-/*			currentFilePath = subDirectory1Index;
-			fileNameList.clear();
-			fileNameList = fdr.parentDirectoryFileNameArrayMethod(subDirectory1Index);*/
-			
-			System.out.println("the parent folder directory we are currently on is: " + subDirectory1Index);
-			subDirectoryIterator2=0;
-			System.out.println("the subDirectory 2 size is " + subDirectory2.size());
-			
-			//subDirectory1 = fL.subFolder1ArrayCreator();
-			subDirectory2 = fL.subFolder2ArrayCreator(subDirectory1.get(resetIterator));
-			// initial filenames will come from deepest sub-folder first
-			subDirectory3 = fL.subFolder3ArrayCreator(subDirectory2.get(0));
-			resetIterator++;
-			
-			/*if (subDirectory2.size() > subDirectoryIterator2) {
-				for(String sub2 : subDirectory2){
-					System.out.println("file in 2nd sub folder array: " + sub2);
-				}
-				subDirectory2 = fL.subFolder2ArrayCreator(subDirectoryIterator2);
-			}*/
 
+			// creates new folder arrays for the 2nd and 3rd sub-folders after
+			// each switch
+			subDirectory2 = fL.subFolder2ArrayCreator(subDirectory1.get(resetIterator));
+			try {
+				subDirectory3 = fL.subFolder3ArrayCreator(subDirectory2.get(0));
+				// try-catch to break out of loop and end program
+			} catch (IndexOutOfBoundsException ioobE2) {
+				System.out.println("All files in Parent Directory finished.");
+				break;
+			}
+			resetIterator++;
+			subDirectoryIterator3 = 0;
+			System.out.println("Finished iterating through Parent folder: " + subDirectory1Index);
 		}
 		// end of 1st sub folder section
 
