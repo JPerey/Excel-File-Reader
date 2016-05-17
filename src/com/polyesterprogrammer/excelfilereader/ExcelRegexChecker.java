@@ -35,7 +35,7 @@ public class ExcelRegexChecker {
 								"Sheet does not have a Revision number indicated in cell. Please locate ISO Rev and enter in ISO");
 						System.out.println("What is ISO: " + isoNum + "'s revision number(ex: 1,2,3,4,11, etc.)?");
 						pulledRevisionNumInt = Integer.parseInt(input.nextLine());
-
+						pulledRevisionNum = "R" + pulledRevisionNumInt;
 						if (pulledRevisionNumInt >= 1) {
 							incorrect = false;
 						}
@@ -46,7 +46,7 @@ public class ExcelRegexChecker {
 				} while (incorrect);
 			}
 			incorrect = true;
-			pulledRevisionNum = "R" + pulledRevisionNumInt;
+			
 		} catch (NullPointerException npE) {
 			System.out.println("Program closing until ISO revision is entered");
 			System.exit(0);

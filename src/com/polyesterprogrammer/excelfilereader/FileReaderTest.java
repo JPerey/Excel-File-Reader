@@ -44,11 +44,14 @@ public class FileReaderTest {
 		 * parent directory folder
 		 */
 		int resetIterator = 1;
+		int parentFolderArrayCounter = 0;
 		// collection of all files found in given directory
 		ArrayList<String> fileNameList = new ArrayList<String>();
 		ArrayList<String> subDirectory1 = new ArrayList<String>();
 		ArrayList<String> subDirectory2 = new ArrayList<String>();
 		ArrayList<String> subDirectory3 = new ArrayList<String>();
+		ArrayList<String> thicknessOnlySubFiles2 = new ArrayList<String>();
+		ArrayList<String> thicknessOnlySubFiles3 = new ArrayList<String>();
 		// folder directory given by user
 		String parentFilePath;
 		String currentFilePath;
@@ -100,8 +103,10 @@ public class FileReaderTest {
 					for (String subDirectory3Index : subDirectory3) {
 						System.out.println("Currently in SUB sub-folder:" + subDirectory3Index);
 						fileNameList.clear();
+						thicknessOnlySubFiles3.clear();
 						fileNameList = fdr.subFolder2FileNameArrayMethod(subDirectory3Index);
-						callPrint.callAndPrintMethod(fileNameList, subDirectory3Index);
+						thicknessOnlySubFiles3 = fdr.returnThicknessOnlySubFile3();
+						callPrint.callAndPrintMethod(fileNameList, thicknessOnlySubFiles3, subDirectory3Index);
 						System.out.println("Finished iterating through SUB sub-folder: " + subDirectory3Index);
 
 					}
@@ -110,8 +115,10 @@ public class FileReaderTest {
 
 				currentFilePath = subDirectory2Index;
 				fileNameList.clear();
+				thicknessOnlySubFiles2.clear();
 				fileNameList = fdr.SubFolder1FileNameArrayMethod(subDirectory2Index);
-				callPrint.callAndPrintMethod(fileNameList, currentFilePath);
+				thicknessOnlySubFiles2 = fdr.returnThicknessOnlySubFile2();
+				callPrint.callAndPrintMethod(fileNameList, thicknessOnlySubFiles2, currentFilePath);
 				System.out.println("Finished iterating through sub-folder: " + subDirectory2Index);
 				subDirectoryIterator3++;
 			}
@@ -119,16 +126,21 @@ public class FileReaderTest {
 
 			// creates new folder arrays for the 2nd and 3rd sub-folders after
 			// each switch
-			subDirectory2 = fL.subFolder2ArrayCreator(subDirectory1.get(resetIterator));
+			parentFolderArrayCounter++;
+			if(subDirectory1.size() > parentFolderArrayCounter){
+				subDirectory2 = fL.subFolder2ArrayCreator(subDirectory1.get(resetIterator));
+			}
+			
 			try {
 				subDirectory3 = fL.subFolder3ArrayCreator(subDirectory2.get(0));
 				// try-catch to break out of loop and end program
 			} catch (IndexOutOfBoundsException ioobE2) {
-				System.out.println("All files in Parent Directory finished.");
-				break;
+				System.out.println("All files in sub folder Directory finished.");
+				//break;
 			}
 			resetIterator++;
 			subDirectoryIterator3 = 0;
+			
 			System.out.println("Finished iterating through Parent folder: " + subDirectory1Index);
 		}
 		// end of 1st sub folder section

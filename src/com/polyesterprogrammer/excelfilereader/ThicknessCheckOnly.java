@@ -23,6 +23,7 @@ public class ThicknessCheckOnly {
 		double thicknessValue = 0;
 		String newSheetFormula = "IF(D24<16000,0.1,IF($J$19>400,0.1,0.07))";
 		try {
+			System.out.println("ISO being formatted: " + fileName);
 			FileInputStream inp = new FileInputStream(filePath + "\\" + fileName);
 			XSSFWorkbook wb = new XSSFWorkbook(inp);
 			XSSFSheet sheetChecker = wb.getSheetAt(0);
@@ -30,7 +31,7 @@ public class ThicknessCheckOnly {
 			// starting cell position to check new or old sheet
 			sheetCheckerRow = sheetChecker.getRow(0);// row
 			sheetCheckerCell = sheetCheckerRow.getCell(9);// cell
-			System.out.println("ISO being formatted: " + fileName);
+			
 
 			// NEW SHEET SECTION
 			if (sheetCheckerCell.toString().equals("filename: ")) {
@@ -90,6 +91,7 @@ public class ThicknessCheckOnly {
 
 			// outputs the piping thickness
 			System.out.println("1-1/2\" Piping THK: " + thicknessCell);
+			System.out.println("-----------------------------------------");
 			// closes scanner object
 			inp.close();
 			// file path for new excel file to save to

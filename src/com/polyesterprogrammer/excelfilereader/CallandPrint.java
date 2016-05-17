@@ -11,38 +11,56 @@ public class CallandPrint {
 	String currentFilePath;
 	ArrayList<String> fileNameList = new ArrayList<String>();
 	int iterator = 0;
+	int thicknessOnlyIterator = 0;
 
-	public void callAndPrintMethod(ArrayList<String> fileNameList, String currentFilePath) {
+	public void callAndPrintMethod(ArrayList<String> fileNameList, ArrayList<String> thicknessOnlyFileNames,
+			String currentFilePath) {
 		System.out.println("--------------");
 		for (String fileNameListing : fileNameList) {
-			System.out.println("ISO to be revised: " + fileNameListing);
+			System.out.println("ISO to add revision # + verify 1-1/2\" thickness: " + fileNameListing);
 		}
 		System.out.println("--------------");
-		try{
-		do{
-		ThicknessChecker tC = new ThicknessChecker();
-		cellValue = tC.thicknessCheckerMethod(currentFilePath, fileNameList.get(iterator));
+		for (String thicknessOnlySubListing : thicknessOnlyFileNames) {
+			System.out.println("ISO to verify 1-1/2\" thickness ONLY: " + thicknessOnlySubListing);
+		}
+		System.out.println("--------------");
 
-		SplitFileName fileSplitter = new SplitFileName(fileNameList.get(iterator), cellValue);
-		newFileName = fileSplitter.SplitFiles();
+		while (thicknessOnlyFileNames.size() > thicknessOnlyIterator) {
+			ThicknessCheckOnly tCO = new ThicknessCheckOnly();
+			tCO.ThicknessCheckerMethodOnly(currentFilePath, thicknessOnlyFileNames.get(thicknessOnlyIterator));
+			thicknessOnlyIterator++;
+		}
+		thicknessOnlyIterator = 0;
+		try {
+			while (fileNameList.size() > iterator) {
+				ThicknessChecker tC = new ThicknessChecker();
+				cellValue = tC.thicknessCheckerMethod(currentFilePath, fileNameList.get(iterator));
 
-		String oldFilePath = currentFilePath + "\\" + fileNameList.get(iterator);
-		String newFilePath = currentFilePath + "\\" + newFileName;
+				SplitFileName fileSplitter = new SplitFileName(fileNameList.get(iterator), cellValue);
+				newFileName = fileSplitter.SplitFiles();
 
-		// turns Strings into an actual file path that
-		// can be used
-		Path oldFileDir = Paths.get(oldFilePath);
+				String oldFilePath = currentFilePath + "\\" + fileNameList.get(iterator);
+				String newFilePath = currentFilePath + "\\" + newFileName;
 
-		NewFilePath renamingMethod = new NewFilePath();
+				// turns Strings into an actual file path that
+				// can be used
+				Path oldFileDir = Paths.get(oldFilePath);
 
-		renamingMethod.excelNewName(oldFileDir, newFilePath);
-		System.out.println("old file name: " + fileNameList.get(iterator) + " || new file name: " + newFileName);
+				NewFilePath renamingMethod = new NewFilePath();
 
-		System.out.println("-------------------------------------------------------");
-		iterator++;
-		}while (iterator < fileNameList.size());
-		}catch(IndexOutOfBoundsException ioobE){
+				renamingMethod.excelNewName(oldFileDir, newFilePath);
+				System.out
+						.println("old file name: " + fileNameList.get(iterator) + " || new file name: " + newFileName);
+
+				System.out.println("-------------------------------------------------------");
+				iterator++;
+			}
+			System.out.println("Finished files to add revision #'s to.");
+
+		} catch (IndexOutOfBoundsException ioobE) {
 			System.out.println("no files to revise.");
+
+			ioobE.printStackTrace();
 		}
 		iterator = 0;
 	}

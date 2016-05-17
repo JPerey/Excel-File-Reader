@@ -108,6 +108,13 @@ public class ThicknessChecker {
 
 			}
 			if (excelCell.getCellType() == Cell.CELL_TYPE_STRING) {
+				/*
+				 * System.out.println("The cell equals: " +
+				 * excelCell.toString()); System.out.println(
+				 * "The row index is: " + excelCell.getRowIndex());
+				 * System.out.println("The column index is: " +
+				 * excelCell.getColumnIndex());
+				 */
 				cellValue = excelCell.toString();
 			} else if (excelCell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
 				System.out.println("The cell equals: " + excelCell.toString());
