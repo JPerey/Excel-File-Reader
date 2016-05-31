@@ -13,6 +13,7 @@ package com.polyesterprogrammer.excelfilereader;
 */
 
 import java.io.IOException;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -24,8 +25,8 @@ class NewFilePath {
 		try {
 			return Files.move(oldName, oldName.resolveSibling(newNameString));
 		} catch (IOException e) {
-
-			e.printStackTrace();
+			System.out.println("File with same name located already in directory. Please check file \"" + oldName
+					+ "\" and see if it is named correctly");
 		}
 		return null;
 	}
@@ -55,6 +56,7 @@ public class FileReaderTest {
 		// folder directory given by user
 		String parentFilePath;
 		String currentFilePath;
+		boolean insideFER = false;
 
 		System.out.println(
 				"Please input Parent Folder Directory (ex: O:\\Technical\\DED\\11-Misc\\DED Tmins for Meridium)");
@@ -63,6 +65,8 @@ public class FileReaderTest {
 		FolderLooper fL = new FolderLooper(parentFilePath);
 
 		FileDirectoryReader fdr = new FileDirectoryReader(parentFilePath);
+		// HotCircuitArrayInitialization hCAI = new
+		// HotCircuitArrayInitialization(hotCircuitFilePath);
 
 		try {
 			// initial creation of all arrays
@@ -70,7 +74,8 @@ public class FileReaderTest {
 			subDirectory2 = fL.subFolder2ArrayCreator(subDirectory1.get(0));
 			// initial filenames will come from deepest sub-folder first
 			subDirectory3 = fL.subFolder3ArrayCreator(subDirectory2.get(0));
-			// this for loop outputs the filename's that will be worked on
+			// initializes file name array of hot circuits that need pdf's made
+			// hotCircuitFiles = hCAI.hotCirccuitArray();
 
 		} catch (NullPointerException npE) {
 			System.out
@@ -101,13 +106,21 @@ public class FileReaderTest {
 				if (!(subDirectory3.size() == 0)) {
 					// 3rd sub folder section
 					for (String subDirectory3Index : subDirectory3) {
-						System.out.println("Currently in SUB sub-folder:" + subDirectory3Index);
+						if (subDirectory3Index.contains("Sent to FER")) {
+							System.out.println("Currently in SUB sub-folder:" + subDirectory3Index);
+							System.out.println("Currently in \"Sent to FER\" folder");
+							insideFER = true;
+						} else {
+							System.out.println("Currently in SUB sub-folder:" + subDirectory3Index);
+						}
 						fileNameList.clear();
 						thicknessOnlySubFiles3.clear();
 						fileNameList = fdr.subFolder2FileNameArrayMethod(subDirectory3Index);
 						thicknessOnlySubFiles3 = fdr.returnThicknessOnlySubFile3();
-						callPrint.callAndPrintMethod(fileNameList, thicknessOnlySubFiles3, subDirectory3Index);
+						callPrint.callAndPrintMethod(fileNameList, thicknessOnlySubFiles3, subDirectory3Index,
+								insideFER);
 						System.out.println("Finished iterating through SUB sub-folder: " + subDirectory3Index);
+						insideFER = false;
 
 					}
 				}
@@ -118,7 +131,7 @@ public class FileReaderTest {
 				thicknessOnlySubFiles2.clear();
 				fileNameList = fdr.SubFolder1FileNameArrayMethod(subDirectory2Index);
 				thicknessOnlySubFiles2 = fdr.returnThicknessOnlySubFile2();
-				callPrint.callAndPrintMethod(fileNameList, thicknessOnlySubFiles2, currentFilePath);
+				callPrint.callAndPrintMethod(fileNameList, thicknessOnlySubFiles2, currentFilePath, insideFER);
 				System.out.println("Finished iterating through sub-folder: " + subDirectory2Index);
 				subDirectoryIterator3++;
 			}
@@ -127,20 +140,20 @@ public class FileReaderTest {
 			// creates new folder arrays for the 2nd and 3rd sub-folders after
 			// each switch
 			parentFolderArrayCounter++;
-			if(subDirectory1.size() > parentFolderArrayCounter){
+			if (subDirectory1.size() > parentFolderArrayCounter) {
 				subDirectory2 = fL.subFolder2ArrayCreator(subDirectory1.get(resetIterator));
 			}
-			
+
 			try {
 				subDirectory3 = fL.subFolder3ArrayCreator(subDirectory2.get(0));
 				// try-catch to break out of loop and end program
 			} catch (IndexOutOfBoundsException ioobE2) {
 				System.out.println("All files in sub folder Directory finished.");
-				//break;
+				// break;
 			}
 			resetIterator++;
 			subDirectoryIterator3 = 0;
-			
+
 			System.out.println("Finished iterating through Parent folder: " + subDirectory1Index);
 		}
 		// end of 1st sub folder section

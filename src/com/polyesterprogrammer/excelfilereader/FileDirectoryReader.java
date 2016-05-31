@@ -34,24 +34,24 @@ public class FileDirectoryReader {
 				repeatedFile = erc.regexRepeater(file.getName());
 				if (file.isFile()) {
 					fileExtension = FilenameUtils.getExtension(file.getName());
-					System.out.println("the file extension is: " + fileExtension);
-					System.out.println("i is: " + i);
+					//System.out.println("the file extension is: " + fileExtension);
+					//System.out.println("i is: " + i);
 					if (repeatedFile) {
 						System.out.println("File: " + file.getName()
 								+ " has already been compiled. Moving to Thickness Checking only.");
 
-						if (fileExtension.equals("pdf") || file.getName().startsWith("$")
+						if (!(fileExtension.equals("xlsm")) || file.getName().startsWith("$")
 								|| file.getName().startsWith("~") || file.getName().startsWith("~$")) {
-							System.out.println("blah 1");
+							System.out.println("File: " + file.getName() + " is an invalid file. Removed from array.");
 						} else {
 							thicknessOnlyFileNames1.add(file.getName());
 						}
 
 					} else {
 
-						if (fileExtension.equals("pdf") || file.getName().startsWith("$")
+						if (!(fileExtension.equals("xlsm")) || file.getName().startsWith("$")
 								|| file.getName().startsWith("~") || file.getName().startsWith("~$")) {
-							System.out.println("blah 3");
+							System.out.println("File: " + file.getName() + " is an invalid file. Removed from array.");
 						} else {
 							onlySubFileNames1.add(file.getName());
 						}
@@ -82,24 +82,24 @@ public class FileDirectoryReader {
 				repeatedFile = erc.regexRepeater(file.getName());
 				if (file.isFile()) {
 					fileExtension = FilenameUtils.getExtension(file.getName());
-					System.out.println("the file extension is: " + fileExtension);
-					System.out.println("i is: " + i);
+					//System.out.println("the file extension is: " + fileExtension);
+					//System.out.println("i is: " + i);
 					if (repeatedFile) {
 						System.out.println("File: " + file.getName()
 								+ " has already been compiled. Moving to Thickness Checking only.");
 
-						if (fileExtension.equals("pdf") || file.getName().startsWith("$")
+						if (!(fileExtension.equals("xlsm")) || file.getName().startsWith("$")
 								|| file.getName().startsWith("~") || file.getName().startsWith("~$")) {
-							System.out.println("blah 2");
+							System.out.println("File: " + file.getName() + " is an invalid file. Removed from array.");
 						} else {
 							thicknessOnlyFileNames2.add(file.getName());
 						}
 
 					} else {
 
-						if (fileExtension.equals("pdf") || file.getName().startsWith("$")
+						if (!(fileExtension.equals("xlsm")) || file.getName().startsWith("$")
 								|| file.getName().startsWith("~") || file.getName().startsWith("~$")) {
-							System.out.println("blah 3");
+							System.out.println("File: " + file.getName() + " is an invalid file. Removed from array.");
 						} else {
 							onlySubFileNames2.add(file.getName());
 
@@ -130,24 +130,24 @@ public class FileDirectoryReader {
 				repeatedFile = erc.regexRepeater(file.getName());
 				if (file.isFile()) {
 					fileExtension = FilenameUtils.getExtension(file.getName());
-					System.out.println("i is: " + i);
-					System.out.println("the file extension is: " + fileExtension);
+					//System.out.println("i is: " + i);
+					//System.out.println("the file extension is: " + fileExtension);
 					if (repeatedFile) {
 						System.out.println("File: " + file.getName()
 								+ " has already been compiled. Moving to Thickness Checking only.");
 
-						if (fileExtension.equals("pdf") || file.getName().startsWith("$")
+						if (!(fileExtension.equals("xlsm")) || file.getName().startsWith("$")
 								|| file.getName().startsWith("~") || file.getName().startsWith("~$")) {
-							System.out.println("blah 3");
+							System.out.println("File: " + file.getName() + " is an invalid file. Removed from array.");
 						} else {
 							thicknessOnlyFileNames3.add(file.getName());
 						}
 
 					} else {
 
-						if (fileExtension.equals("pdf") || file.getName().startsWith("$")
+						if (!(fileExtension.equals("xlsm")) || file.getName().startsWith("$")
 								|| file.getName().startsWith("~") || file.getName().startsWith("~$")) {
-							System.out.println("blah 3");
+							System.out.println("File: " + file.getName() + " is an invalid file. Removed from array.");
 						} else {
 							onlySubFileNames3.add(file.getName());
 						}
